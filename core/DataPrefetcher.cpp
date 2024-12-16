@@ -6,7 +6,7 @@ namespace olympia
 
     DataPrefetcher::DataPrefetcher(sparta::TreeNode* node, const DataPrefetcherParameterSet* p) :
         sparta::Unit(node),
-        PrefetcherIF<PrefetchEngineIF<>>(dynamic_cast<sparta::Unit*>(this)),
+        PrefetcherIF<PrefetchEngineIF<>>(this),
         prefetcher_credits_(p->req_queue_size),
         req_queue_("Req_Queue", p->req_queue_size, getClock()),
         ev_gen_prefetch_{getEventSet(), "gen_prefetch_event",
@@ -45,8 +45,7 @@ namespace olympia
     // callbacks
 
     //! Process the incoming memory access and send to the engine
-    void
-    DataPrefetcher::processIncomingReq(const olympia::MemoryAccessInfoPtr & mem_access_info_ptr)
+    void DataPrefetcher::processIncomingReq(const olympia::MemoryAccessInfoPtr & mem_access_info_ptr)
     {
         // queue in incoming buffer
         req_queue_.push(mem_access_info_ptr);
